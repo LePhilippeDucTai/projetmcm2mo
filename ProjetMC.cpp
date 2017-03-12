@@ -29,7 +29,7 @@ do {
 	i = i+1 ;
 }while( S.precision_xi() + S.precision_c() > error);
 S.display();
-std::cout << (-1)*log(1-alpha) << std::endl ;
+//std::cout << (-1)*log(1-alpha) << std::endl ;
 return 0 ;
 }
 

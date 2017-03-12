@@ -2,6 +2,7 @@
 #include <random>
 #include <cstdio>
 #include <ctime>
+#include "utility.hpp"
 
 // ok
 std::mt19937 mt_rand(time(0));
@@ -34,20 +35,31 @@ std::vector<double> vPoissonComp(int nsim, double lambda, double mu, double sigm
 	return X ;
 }
 
+void coucou(){
+	std::cout << "coucou" << std::endl;
+}
+
 int main(){
-	double lambda = 100 ;
-	double mu = 1 ;
-	double sigma = 1 ;
-	int nsim = 100000 ;
+	// double lambda = 100 ;
+	// double mu = 1 ;
+	// double sigma = 1 ;
+	// int nsim = 100000 ;
 
-    std::clock_t start;
-    double duration;
+ //    std::clock_t start;
+ //    double duration;
 
-    start = std::clock();
-	std::vector<double> v = vPoissonComp(nsim,lambda,mu,sigma);
+ //    start = std::clock();
+	// std::vector<double> v = vPoissonComp(nsim,lambda,mu,sigma);
 
-  duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+ //  duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
 
-    std::cout<<"Duration : "<< duration <<'\n';
+ //    std::cout<<"Duration : "<< duration <<'\n';
+
+//std::vector<double> r = range(0, 1, 0.01) ;
+std::vector<double> r ;
+display_vect(r);
+
+
+
 
 }
