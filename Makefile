@@ -1,19 +1,23 @@
-CXX=g++
-CXXFLAGS=-g -std=c++11 
-BIN=a.out
-
-SRC=$(wildcard *.cpp)
-OBJ=$(SRC:%.cpp=%.o)
-
-all: $(OBJ)
-	$(CXX) -o $(BIN) $^
-
-%.o: %.c
-	$(CXX) $@ -c $<
-
+# Declaration of variables
+CC = g++
+CC_FLAGS = -w
+ 
+# File names
+EXEC = run
+SOURCES = $(wildcard *.cpp)
+OBJECTS = $(SOURCES:.cpp=.o)
+ 
+# Main target
+$(EXEC): $(OBJECTS)
+	$(CC) $(OBJECTS) -o $(EXEC)
+ 
+# To obtain object files
+%.o: %.cpp
+	$(CC) -c $(CC_FLAGS) $< -o $@
+ 
+# To remove generated files
 clean:
-	rm -f *.o
-	rm $(BIN)
+	rm -f $(EXEC) $(OBJECTS)
 # $@ 	Le nom de la cible
 # $< 	Le nom de la première dépendance
 # $^ 	La liste des dépendances

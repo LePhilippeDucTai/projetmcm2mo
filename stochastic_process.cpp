@@ -1,4 +1,4 @@
-#include "stochastic-process.h"
+#include "stochastic_process.hpp"
 
 StochasticProcess::StochasticProcess(double T, double Nt, double X0)
 {
