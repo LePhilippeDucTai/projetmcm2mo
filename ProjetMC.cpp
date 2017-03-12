@@ -5,7 +5,7 @@
 #include <cmath>
 
 double gamma(int p,double g0){
-	return g0/((double)p+100) ;
+	return g0/((double)p+99) ;
 }
 
 
