@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <ctime>
 
+// ok
 std::mt19937 mt_rand(time(0));
 
 int rpois(double lambda){
