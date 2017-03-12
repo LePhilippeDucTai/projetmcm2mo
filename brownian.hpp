@@ -1,4 +1,4 @@
-#include "stochastic-process.hpp"
+#include "stochastic_process.hpp"
 
 class Brownian : public StochasticProcess {
 
@@ -10,4 +10,4 @@ public :
 
 private :
 
-}
+};
