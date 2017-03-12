@@ -25,7 +25,6 @@ void StochasticGradient::Iterate(int n, double fX){
 	double h2 = StochasticGradient::H2(fX); 
 	this->_xi = this->_xi - this->_gamma(n,this->_gamma0)*h1 ;
 	this->_c = this->_c - this->_gamma(n,this->_gamma0)*h2 ;
-
 	this->niterate++;
 }
 
