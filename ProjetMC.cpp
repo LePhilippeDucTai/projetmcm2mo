@@ -15,7 +15,7 @@ Random::Randomize(100);
 
 double alpha = 0.95 ;
 double xi0 = 0. ;
-double gamma0 =  2. ;
+double gamma0 =  .5 ;
 
 StochasticGradient S(gamma0,gamma,xi0,alpha) ;
 double error = 1e-7;
