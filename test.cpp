@@ -37,7 +37,10 @@ std::vector<double> vPoissonComp(int nsim, double lambda, double mu, double sigm
 
 void coucou(){
 	std::cout << "coucou" << std::endl;
+	std::cout << "bye" << std::endl;
 }
+
+
 
 int main(){
 	// double lambda = 100 ;
