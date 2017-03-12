@@ -1,5 +1,5 @@
 //#include "ProjetMC.hpp"
-#include "random-singleton.h"
+#include "random_singleton.h"
 #include "stochastic_gradient.hpp"
 #include <iostream>
 #include <cmath>

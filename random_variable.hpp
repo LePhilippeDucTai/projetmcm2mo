@@ -1,4 +1,4 @@
-#include "random-singleton.h"
+#include "random_singleton.h"
 
 /*
 La classe RandomVariable permet d'assigner à un objet X de type RandomVariable
