@@ -1,1 +1,1 @@
-g++ -o prog stochastic_gradient.cpp random-singleton.cpp ProjetMC.cpp
+g++ -o prog stochastic-gradient.cpp random-singleton.cpp ProjetMC.cpp
