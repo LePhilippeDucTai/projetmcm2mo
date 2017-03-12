@@ -1,6 +1,6 @@
 // random-singleton.cpp (Singleton)
 // Implementation de la classe Random / Implementation of the class Random
-#include "random-singleton.h"
+#include "random_singleton.h"
 
 #include <cfloat> //DBL_EPSILON
 using namespace std;

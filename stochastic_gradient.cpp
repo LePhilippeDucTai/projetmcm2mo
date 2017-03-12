@@ -1,16 +1,7 @@
-#include "stochastic-gradient.hpp"
+#include "stochastic_gradient.hpp"
 
-// Définition du constructeur
-StochasticGradient::StochasticGradient(double gamma0,double (*gamma)(int,double), double xi0, double alpha)
-{
-	this->_gamma0 = gamma0 ;
-	this->_xi = xi0 ;
-	this->_alpha = alpha ;
-	this->_c = 0 ;
-	this-> _gamma = gamma ;
-	this-> niterate = 0 ;
-}
-
+StochasticGradient::StochasticGradient(double gamma0,double (*gamma)(int,double), double xi0, double alpha) 
+		: _gamma0(gamma0), _gamma(gamma), _xi(xi0), _c(0.), niterate(0.) {}
 
 // double StochasticGradient::gamma(int n){
 // 	return (this->_gamma0)/((double)n) ;

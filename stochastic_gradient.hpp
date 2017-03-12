@@ -1,4 +1,4 @@
-#include "random-singleton.h"
+#include "random_singleton.h"
 #include <iostream>
 #include <cmath>
 #include <vector>
