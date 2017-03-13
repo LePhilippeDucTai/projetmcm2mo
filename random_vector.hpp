@@ -24,7 +24,7 @@ template <class T> struct RandomVect {
 	}
  protected:
 	T value;
-
+	std::mt19937 generator;
 };
 
 

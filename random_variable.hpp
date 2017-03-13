@@ -16,7 +16,7 @@ template <class T> struct RandomVar {
 	
 	typedef T result_type;
 	RandomVar() 
-			: value(0) {}
+			: value(0),generator(1) {}
 	RandomVar(T value)
 			: value(value),generator(1) {} // default seed = 1
 	virtual ~RandomVar() {}
