@@ -10,6 +10,8 @@ double gamma(int p,double g0){
 }
 
 
+double identite(double x){ return x ;}
+
 int main(){
 
 	Random::Randomize(100);
@@ -28,7 +30,7 @@ int main(){
 	seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::cout << seed << std::endl; 
 	Gaussian G(1.,.5);
-	std::vector<double> result = MonteCarlo(1e5, G);
+	std::vector<double> result = MonteCarlo(1e5, G,identite);
 	std::cout << result[0] << ' ' << result[1] << ' ' << result[2] << std::endl;
 	exit(-1);
 	do {

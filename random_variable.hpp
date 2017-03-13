@@ -166,6 +166,7 @@ std::vector<double> MonteCarlo(int n, Gen G, double (*phi)(double))
 {
 	std::vector<double> result(3,0);
 	double x;
+	double phix ;
 	for (int j = 0; j < n; j++) {
 		x = G();
 		phix = phi(x) ;
