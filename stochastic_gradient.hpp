@@ -1,3 +1,5 @@
+#ifndef STOCHASTIC_GRADIENT_HPP
+#define STOCHASTIC_GRADIENT_HPP
 #include "random_singleton.h"
 #include <iostream>
 #include <cmath>
@@ -30,3 +32,4 @@ private:
 	int niterate ;
 
 };
+#endif
