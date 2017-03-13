@@ -24,6 +24,9 @@ int main(){
 	int i = 1 ;
 	double N ;
 	seed = std::chrono::system_clock::now().time_since_epoch().count();
+	std::cout << seed << std::endl;
+	seed = std::chrono::system_clock::now().time_since_epoch().count();
+	std::cout << seed << std::endl; 
 	Gaussian G(1.,.5);
 	std::vector<double> result = MonteCarlo(1e5, G);
 	std::cout << result[0] << ' ' << result[1] << ' ' << result[2] << std::endl;

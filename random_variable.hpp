@@ -18,21 +18,29 @@ template <class T> struct RandomVar {
 	RandomVar() 
 			: value(0) {}
 	RandomVar(T value)
-			: value(value) {}
+			: value(value),generator(1) {} // default seed = 1
 	virtual ~RandomVar() {}
 	virtual T operator()() = 0; 
 	virtual T Pdf(double) = 0 ;
 	T Current() const {
 		return value;
 	}
+
+	void init(int seed_) {
+		seed = seed_ ;
+		generator.seed(seed);
+	}
+
  protected:
 	T value;
+	int seed ;
+	std::mt19937 generator;
 
 };
 
 struct Uniform : public RandomVar<double> {
 	Uniform(double left_boundary , double right_boundary)
-			: left_boundary(left_boundary), right_boundary(right_boundary), generator(seed) {}
+			: left_boundary(left_boundary), right_boundary(right_boundary) {}
 
 	double operator()() {
 		return value = left_boundary + (right_boundary - left_boundary)*
@@ -44,14 +52,14 @@ struct Uniform : public RandomVar<double> {
 	}
  private:
 	double left_boundary, right_boundary;
-	std::mt19937 generator;
+
 };
 
 struct Gaussian : public RandomVar<double> {
-	Gaussian(double mean, double variance) 
-			: mean(mean), variance(variance), uniform(0,1) {}
+	Gaussian(double mean, double std) 
+			: mean(mean), std(std) {}
 	double operator()() {
-		double x = uniform();
+		double x = generator()/static_cast<double> (generator.max());
 		int signe = 0;
 		double c0 = 2.515517, c1 = 0.802853, c2 = 0.010328, d1 = 1.432788, d2 = 0.189269, d3 = 0.001308 ;
 
@@ -63,44 +71,43 @@ struct Gaussian : public RandomVar<double> {
 			signe=-1.0;
 			
 		double t = sqrt(-2.0*log(x));
-		return mean + variance*(signe * (t-((c2*t+c1)*t+c0)/(1.0+t*(d1+t*(d2+d3*t)))));
+		return mean + std*(signe * (t-((c2*t+c1)*t+c0)/(1.0+t*(d1+t*(d2+d3*t)))));
 	}
 	inline double Pdf(double x) {
-		return exp(-0.5*(x-mean)*(x-mean)/variance)/sqrt(2*M_PI*variance);
+		return exp(-0.5*(x-mean)*(x-mean)/std)/sqrt(2*M_PI*std);
 	}
  private :
- double mean, variance;
- Uniform uniform;
+ double mean, std;
+
 };
 
 struct Exponential : public RandomVar<double> {
 	Exponential(double lambda) 
-			: lambda(lambda), inv_lambda(1./lambda), uniform(0.,1.) {}
+			: lambda(lambda), inv_lambda(1./lambda){}
 	double operator()() {
-	
-		return -inv_lambda*log(uniform());
+		return -inv_lambda*log(generator()/static_cast<double> (generator.max()));
 	}
 		inline double Pdf(double x) {
 		return (x > 0) ? lambda*exp(-lambda*x): 0;
 	}
  private :
 	double inv_lambda, lambda;
-	Uniform uniform;
+
 };
 
 struct LogNormal : public RandomVar<double> {
-	LogNormal(double mean, double variance)
-		: mean(mean), variance(variance), G(mean,variance) {}
+	LogNormal(double mean, double std)
+		: mean(mean), std(std), G(mean,std) {}
 	double operator()() {
 		return exp(G());
 	}
 		inline double Pdf(double x) {
-		return (x > 0) ? exp(-0.5*(log(x)-mean)*(log(x)-mean)/variance)/(sqrt(2*M_PI*variance)*x): 0;
+		return (x > 0) ? exp(-0.5*(log(x)-mean)*(log(x)-mean)/std)/(sqrt(2*M_PI*std)*x): 0;
 	}
  private :
  	Gaussian G;
  	double mean;
- 	double variance;
+ 	double std;
 };
 
 struct ChiSquared : public RandomVar<double> {
@@ -155,14 +162,15 @@ struct Gamma : public RandomVar<double> {
 
 
 template <typename Gen>
-std::vector<double> MonteCarlo(int n, Gen G)
+std::vector<double> MonteCarlo(int n, Gen G, double (*phi)(double))
 {
 	std::vector<double> result(3,0);
 	double x;
 	for (int j = 0; j < n; j++) {
 		x = G();
-		result[0] += x;
-		result[1] += x*x;
+		phix = phi(x) ;
+		result[0] += phix;
+		result[1] += phix*phix;
 	}
 	result[0] /= (double) n;
 	result[1] = (result[1] - n*result[0]*result[0])/(double)(n-1);
