@@ -33,10 +33,7 @@ template <class T> struct RandomVar {
 struct Uniform : public RandomVar<double> {
 	Uniform(double left_boundary , double right_boundary)
 			: left_boundary(left_boundary), right_boundary(right_boundary), generator(seed) {}
-	/*double Generator(void) {
-		std::mt19937 generator;
-		return generator();
-	}*/
+
 	double operator()() {
 		return value = left_boundary + (right_boundary - left_boundary)*
 					(generator()/static_cast<double> (generator.max()));
