@@ -86,7 +86,7 @@ struct GaussianVector : public RandomVect<arma::vec>
 	}
 
 	inline double Pdf(arma::vec x) { 
-		double C = 1/(pow(2*M_PI,d/2)*sigmadetsqrt);
+		double C = 1./(pow(2.*M_PI,d/2.)*sigmadetsqrt);
 		double Y = arma::as_scalar(-0.5*(x-mu).t()*sigmainv*(x-mu)) ;
 		return C*exp(Y) ;
 	}

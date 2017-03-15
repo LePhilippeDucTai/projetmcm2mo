@@ -82,6 +82,13 @@ int main(){
  	mu1.print("Mu : ");
  	sigma1.print("Sigma :");
 
+ 	std::cout << "Gaussian density at mu " << G1.Pdf(mu1) << std::endl;
+	std::cout << "Gaussian density at mu+0.1 " << G1.Pdf(mu1+0.1) << std::endl;
+	std::cout << "Gaussian density at mu-0.1 " << G1.Pdf(mu1-0.1) << std::endl;
+	std::cout << "Gaussian density at mu+4 " << G1.Pdf(mu1+4) << std::endl;
+	std::cout << "Gaussian density at mu-4 " << G1.Pdf(mu1-4) << std::endl;
+
+
 	// exit(-1);
 	// do {
 	// 	N = Random::Gaussian();
