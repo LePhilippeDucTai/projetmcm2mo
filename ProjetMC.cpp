@@ -50,8 +50,12 @@ int main(){
 	UniformVector U(0,1,10);
 	U.init(100);
 	mat X = U();
+	std::cout << "Size of the vector : " << U.Size() << std::endl;
 	X.print("Uniform Vector :");
-
+//	or
+//	U().print("Uniform Vector too");
+	std::cout << "\n";
+	std::cout << U.Current()<< std::endl; // << overloading in order to print vectors !!
 	int d = 5;
 	 vec mu = zeros<vec>(d);
 	 mat sigma = eye<mat>(d,d);

@@ -21,6 +21,9 @@ template <class T> struct RandomVect {
 	virtual ~RandomVect() {}
 	virtual T operator()() = 0; 
 	virtual double Pdf(T) = 0 ;
+	int Size() const {
+		return d;
+	}
 	T Current() const {
 		return value;
 	}
@@ -32,14 +35,15 @@ template <class T> struct RandomVect {
  protected:
 	T value;
 	int seed ;
-	//int d ; // Dimension of the vector
+	int d ; // Dimension of the vector
 	std::mt19937 generator;
 };
 
 
 struct UniformVector : public RandomVect<arma::vec> {
 	UniformVector(double left_boundary , double right_boundary, int N)
-			: left_boundary(left_boundary), right_boundary(right_boundary), d(N) {}
+			: left_boundary(left_boundary), right_boundary(right_boundary) 
+			{ d = N; }
 	arma::vec operator()() {
 		arma::vec A(d);
 		value = A ;
@@ -57,25 +61,22 @@ struct UniformVector : public RandomVect<arma::vec> {
 	}
  private:
 	double left_boundary, right_boundary;
-	int d ;
 };
 
 
-struct GaussianVector : public RandomVect<arma::vec>
-{
+struct GaussianVector : public RandomVect<arma::vec> {
 	// Gaussian vector initialized as N(0, Id)
-	 GaussianVector(int N)
- 	: mu(arma::zeros<arma::vec>(N)), sigma(arma::eye<arma::mat>(N,N)), d(N) {
- 		flag_cr = true ; // flag == true if sigma == Id 
- 	}
-
- 	GaussianVector(arma::vec mu , arma::mat sigma ,int N)
- 		: mu(mu), sigma(sigma), d(N) {
- 			sigmachol = arma::chol(sigma,"lower");
- 			sigmainv = arma::inv(sigma) ;
- 			sigmadetsqrt = sqrt(arma::det(sigma));
- 			flag_cr = false ; // flag == false if sigma =! Id
- 		}
+	 GaussianVector(int N) // flag == true if sigma == Id 
+ 			: mu(arma::zeros<arma::vec>(N)), sigma(arma::eye<arma::mat>(N,N)), flag_cr(true) 
+				{ d = N; }
+ 	GaussianVector(arma::vec mu , arma::mat sigma, int N)
+			: mu(mu), sigma(sigma) {
+				d = N;
+	 			sigmachol = arma::chol(sigma,"lower");
+	 			sigmainv = arma::inv(sigma) ; 
+	 			sigmadetsqrt = sqrt(arma::det(sigma));
+	 			flag_cr = false ; // flag == false if sigma =! Id
+	 		}
 
 	arma::vec operator()(){
 		value.zeros(d);
@@ -112,7 +113,6 @@ struct GaussianVector : public RandomVect<arma::vec>
  	arma::mat sigmachol ;
  	double sigmadetsqrt ;
  	bool flag_cr ;
- 	int d ;
 };
 
 

@@ -21,7 +21,7 @@ template <class T> struct RandomVar {
 			: value(value),generator(1) {} // default seed = 1
 	virtual ~RandomVar() {}
 	virtual T operator()() = 0; 
-	virtual T Pdf(double) = 0 ;
+	virtual T Pdf(T) = 0 ;
 	T Current() const {
 		return value;
 	}
@@ -71,7 +71,7 @@ struct Gaussian : public RandomVar<double> {
 			signe=-1.0;
 			
 		double t = sqrt(-2.0*log(x));
-		return mean + std*(signe * (t-((c2*t+c1)*t+c0)/(1.0+t*(d1+t*(d2+d3*t)))));
+		return value = mean + std*(signe * (t-((c2*t+c1)*t+c0)/(1.0+t*(d1+t*(d2+d3*t)))));
 	}
 	inline double Pdf(double x) {
 		return exp(-0.5*(x-mean)*(x-mean)/std)/sqrt(2*M_PI*std);
@@ -85,7 +85,7 @@ struct Exponential : public RandomVar<double> {
 	Exponential(double lambda) 
 			: lambda(lambda), inv_lambda(1./lambda){}
 	double operator()() {
-		return -inv_lambda*log(generator()/static_cast<double> (generator.max()));
+		return  value = -inv_lambda*log(generator()/static_cast<double> (generator.max()));
 	}
 		inline double Pdf(double x) {
 		return (x > 0) ? lambda*exp(-lambda*x): 0;
@@ -99,7 +99,7 @@ struct LogNormal : public RandomVar<double> {
 	LogNormal(double mean, double std)
 		: mean(mean), std(std), G(mean,std) {}
 	double operator()() {
-		return exp(G());
+		return  value = exp(G());
 	}
 		inline double Pdf(double x) {
 		return (x > 0) ? exp(-0.5*(log(x)-mean)*(log(x)-mean)/std)/(sqrt(2*M_PI*std)*x): 0;
@@ -134,7 +134,7 @@ struct Gamma : public RandomVar<double> {
 
   if( a < 1) {
   	Gamma G(a+1,b);
- 		return G()*pow(U(),1./a);
+ 		return  value = G()*pow(U(),1./a);
  	}
  	double d = a - 1.0 / 3.0;
   double c = (1.0 / 3.0) / sqrt (d);
@@ -147,7 +147,7 @@ struct Gamma : public RandomVar<double> {
 		v = pow((1+c*z),3.);
 	}
 
-	return d*v/b;
+	return  value = d*v/b;
 }	
 //TODO : Do the pdf of Gamma distribution
 		inline double Pdf(double x) {
