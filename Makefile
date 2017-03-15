@@ -1,12 +1,12 @@
-CXX=g++
-CXXFLAGS=-g -std=c++11 
+CXX=g++ -larmadillo
+CXXFLAGS=-g -std=c++11
 BIN=mc
 
-SRC=$(wildcard *.cpp)
+SRC=$(wildcard *.cpp) 
 OBJ=$(SRC:%.cpp=%.o)
 
 all: $(OBJ)
-	$(CXX) -o $(BIN) $^
+	$(CXX) -o  $(BIN) $^
 
 %.o: %.c
 	$(CXX) $@ -c $<

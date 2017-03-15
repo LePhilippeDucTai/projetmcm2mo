@@ -8,7 +8,7 @@
 #include <random>
 #include <chrono>
 
-static unsigned seed;
+//static unsigned seed;
 //TODO :
 //	- Change all argument into vectors
 //	- Do the pdf of multivariate normal distribution and also its derivative
@@ -159,6 +159,7 @@ struct Gamma : public RandomVar<double> {
  Uniform U;
 };
 		
+
 
 
 template <typename Gen>
