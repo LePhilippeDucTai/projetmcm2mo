@@ -17,10 +17,6 @@ StochasticGradient::StochasticGradient(GaussianVector Y, double gamma0, double (
 		_mu = mu ;
 	}
 
-// double StochasticGradient::gamma(int n){
-// 	return (_gamma0)/((double)n) ;
-// }
-
 // Cette fonction sera appelée dans une boucle pour i
 // Elle calculera le taux de variation de la dernière valeur de xi avec la nouvelle calculée
 // On s'arrêtera dans la boucle lorsque le taux d'erreur sera inférieur à une certaine valeur
@@ -81,34 +77,16 @@ double StochasticGradient::H2(arma::vec &x){
 	return _c - _xi - (1./(1.-_alpha))*fmax(0., _phi(x) - _xi) ;
 }
 
-// double Stochastic::Gradient::L1(arma::vec x){
-//  return 0. ;
-// }
-// double Stochastic::Gradient::L2(arma::vec x){
-//  return 0. ;
-// }
-// double Stochastic::Gradient::K1(arma::vec x){
-//  return 0. ;
-// }
-// double Stochastic::Gradient::K2(arma::vec x){
-//  return 0. ;
-// }
-
-// TODO LIST :
-/*
-- Inclure les constantes rho, a et b dans les RandomVect pour chaque loi.
-- Ajouter le gradient de la pdf pour chaque loi dans RandomVect
-
-- Dans le constructeur mettre en entrée un RandomVect : l'objet RandomVect contient toute l'information
-nécessaire : génération des vecteurs aléatoires, contient la PDF, contient les constantes rho, a et b
-nécessaires à l'algorithme d'Importance Sampling
-
-- L'objet RandomVect faisant partie de l'algorithme, on peut réaliser la boucle de calculs dans la fonction Iterate
-
-- Implémenter les fonctions L1, L2, K1, K2. Ces 4 fonctions prennent juste un argument de type arma::vec
-Il n'est pas nécessaire d'ajouter d'autres champs car les valeurs de xi, C, mu et theta sont stockées dans la classe.
-
-
-*/
-
+double StochasticGradient::L1(arma::vec &x){
+ return 0. ;
+}
+double StochasticGradient::L2(arma::vec &x){
+ return 0. ;
+}
+double StochasticGradient::K1(arma::vec &x){
+ return 0. ;
+}
+double StochasticGradient::K2(arma::vec &x){
+ return 0. ;
+}
 

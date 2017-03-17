@@ -73,9 +73,9 @@ struct GaussianVector : public RandomVect<arma::vec> {
 	 GaussianVector(int N) // flag == true if sigma == Id 
  			: mu(arma::zeros<arma::vec>(N)), sigma(arma::eye<arma::mat>(N,N)), flag_cr(true) 
 				{ d = N; 
-				SGIS_rho = 1 ;
-				SGIS_a = 1 ;
-				SGIS_b = 2 ;
+				SGIS_rho = 1. ;
+				SGIS_a = 1. ;
+				SGIS_b = 2. ;
 				sigmainv = sigma ;
 				}
  	GaussianVector(arma::vec mu , arma::mat sigma, int N)
@@ -85,9 +85,9 @@ struct GaussianVector : public RandomVect<arma::vec> {
 	 			sigmainv = arma::inv(sigma) ; 
 	 			sigmadetsqrt = sqrt(arma::det(sigma));
 	 			flag_cr = false ; // flag == false if sigma != Id
-	 			SGIS_rho = 1 ;
-				SGIS_a = 1 ;
-				SGIS_b = 2 ;
+	 			SGIS_rho = 1. ;
+				SGIS_a = 1. ;
+				SGIS_b = 2. ;
 	 		}
 
 	arma::vec operator()(){

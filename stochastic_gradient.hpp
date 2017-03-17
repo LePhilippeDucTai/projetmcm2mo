@@ -27,6 +27,11 @@ public:
 	double precision_c();
 	double H1(arma::vec &x);
 	double H2(arma::vec &x);
+	double L1(arma::vec &x);
+	double L2(arma::vec &x);
+	double K1(arma::vec &x);
+	double K2(arma::vec &x);
+	
 	// Accesseurs
 	double getVaR();
 	double getCVaR();
