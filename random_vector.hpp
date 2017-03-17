@@ -21,6 +21,7 @@ template <class T> struct RandomVect {
 	virtual ~RandomVect() {}
 	virtual T operator()() = 0; 
 	virtual double Pdf(T) = 0 ;
+	virtual arma::vec Gradient(T) = 0 ;
 	int Size() const {
 		return d;
 	}
@@ -37,6 +38,9 @@ template <class T> struct RandomVect {
 	int seed ;
 	int d ; // Dimension of the vector
 	std::mt19937 generator;
+
+	 // Specialized constants in the stochastic gradient+importance sampling algorithm
+	double SGIS_rho, SGIS_a, SGIS_b ;
 };
 
 
@@ -68,14 +72,22 @@ struct GaussianVector : public RandomVect<arma::vec> {
 	// Gaussian vector initialized as N(0, Id)
 	 GaussianVector(int N) // flag == true if sigma == Id 
  			: mu(arma::zeros<arma::vec>(N)), sigma(arma::eye<arma::mat>(N,N)), flag_cr(true) 
-				{ d = N; }
+				{ d = N; 
+				SGIS_rho = 1 ;
+				SGIS_a = 1 ;
+				SGIS_b = 2 ;
+				sigmainv = sigma ;
+				}
  	GaussianVector(arma::vec mu , arma::mat sigma, int N)
 			: mu(mu), sigma(sigma) {
 				d = N;
 	 			sigmachol = arma::chol(sigma,"lower");
 	 			sigmainv = arma::inv(sigma) ; 
 	 			sigmadetsqrt = sqrt(arma::det(sigma));
-	 			flag_cr = false ; // flag == false if sigma =! Id
+	 			flag_cr = false ; // flag == false if sigma != Id
+	 			SGIS_rho = 1 ;
+				SGIS_a = 1 ;
+				SGIS_b = 2 ;
 	 		}
 
 	arma::vec operator()(){
@@ -90,6 +102,11 @@ struct GaussianVector : public RandomVect<arma::vec> {
 		double C = 1./(pow(2.*M_PI,d/2.)*sigmadetsqrt);
 		double Y = arma::as_scalar(-0.5*(x-mu).t()*sigmainv*(x-mu)) ;
 		return C*exp(Y) ;
+	}
+
+	// Gradient de la Pdf
+	inline arma::vec Gradient(arma::vec x){
+		return Pdf(x)*sigmainv*(x-mu) ;
 	}
 
 	inline double norm_inv(double x){
