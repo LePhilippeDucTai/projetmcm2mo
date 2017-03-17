@@ -5,7 +5,7 @@ This repository contains our Monte-Carlo project on calculating a Value-at-Risk 
 **Olivier Bardou, Noufel Frikha, and Gilles Pagès**.
 
 ## Requirements ##
-* Make sure to have installed a `g++` compiler (C++14) installed on your OS.
+* Make sure to have a `g++` compiler (C++14) installed on your OS.
 * Make sure to install the armadillo library, found at : http://arma.sourceforge.net
 
 ## Compiling ##
