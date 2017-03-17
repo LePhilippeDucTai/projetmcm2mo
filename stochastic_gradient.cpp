@@ -5,9 +5,9 @@
 // 		: _gamma0(gamma0), _gamma(gamma), _xi(xi0), _alpha(alpha), _c(0.), niterate(0.) {}
 
 // Sequences are initialized at 0 by default
-StochasticGradient::StochasticGradient(GaussianVector X, double gamma0, double (*gamma)(int,double), double (*phi)(arma::vec), double alpha, int dim)
-	: X(X), _gamma0(gamma0), _gamma(gamma), _phi(phi),_alpha(alpha), _dim(dim),_c(0.),_xi(0.), 
-		_theta(arma::zeros<arma::vec>(dim)), _mu(arma::zeros<arma::vec>(dim)),niterate(0.){}
+StochasticGradient::StochasticGradient(GaussianVector Y, double gamma0, double (*gamma)(int,double), double (*phi)(arma::vec), double alpha)
+	: X(Y), _gamma0(gamma0), _gamma(gamma), _phi(phi),_alpha(alpha), _dim(Y.Size()),_c(0.),_xi(0.), 
+		_theta(arma::zeros<arma::vec>(Y.Size())), _mu(arma::zeros<arma::vec>(Y.Size())), niterate(0){}
 
 	// In case we need to initialize the sequences
 	void StochasticGradient::init_seq(double xi0, double c0, arma::vec theta, arma::vec mu, double rho,double a,double b){

@@ -14,7 +14,7 @@ public:
 	// L'algorithme du gradient stochastique est déterminé par la suite gamma et son terme initial.
 	//Constructeur
 	// StochasticGradient(double gamma0, double (*gamma)(int,double), double xi0,double alpha);
-	StochasticGradient(GaussianVector X, double gamma0, double (*gamma)(int,double), double (*phi)(arma::vec x),double alpha,int dimension);
+	StochasticGradient(GaussianVector X, double gamma0, double (*gamma)(int,double), double (*phi)(arma::vec x),double alpha);
 	
 	// Initialize the sequences before doing iterations
 	void init_seq(double xi0, double c0, arma::vec theta, arma::vec mu,double rho, double a, double b);

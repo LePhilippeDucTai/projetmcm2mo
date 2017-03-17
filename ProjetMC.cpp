@@ -31,15 +31,15 @@ int main(){
 
 	double alpha = 0.975 ;
 	double gamma0 =  2. ;
-	int dim = 1 ;
+	int dimension = 1 ;
 	double error = 1e-6;
 
-	GaussianVector G(dim);
+	GaussianVector G(dimension);
 	G.init(10);
 	mat C = G() ;
 	C.print("Gaussian Vector :");
 
-	StochasticGradient S(G,gamma0,gamma,identite,alpha,dim) ;
+	StochasticGradient S(G,gamma0,gamma,identite,alpha) ;
 	S.Iterate(error);
 	S.display();
 
