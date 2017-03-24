@@ -33,6 +33,19 @@ template <class T> struct RandomVect {
 		seed = seed_ ;
 		generator.seed(seed);
 	}
+
+	double SGIS_rho(){
+		return _SGIS_rho ;
+	}
+	double SGIS_a(){
+		return _SGIS_a ;
+	}
+	double SGIS_b(){
+		return _SGIS_b;
+	}
+	double SGIS_C(){
+		return _SGIS_C;
+	}
  protected:
 	T value;
 	int seed ;
@@ -40,7 +53,7 @@ template <class T> struct RandomVect {
 	std::mt19937 generator;
 
 	 // Specialized constants in the stochastic gradient+importance sampling algorithm
-	double SGIS_rho, SGIS_a, SGIS_b ;
+	double _SGIS_rho, _SGIS_a, _SGIS_b, _SGIS_C ;
 };
 
 
@@ -73,9 +86,10 @@ struct GaussianVector : public RandomVect<arma::vec> {
 	 GaussianVector(int N) // flag == true if sigma == Id 
  			: mu(arma::zeros<arma::vec>(N)), sigma(arma::eye<arma::mat>(N,N)), flag_cr(true) 
 				{ d = N; 
-				SGIS_rho = 1. ;
-				SGIS_a = 1. ;
-				SGIS_b = 2. ;
+				_SGIS_rho = 1. ;
+				_SGIS_a = 1. ;
+				_SGIS_b = 2. ;
+				_SGIS_C = 2. ;
 				sigmainv = sigma ;
 				}
  	GaussianVector(arma::vec mu , arma::mat sigma, int N)
@@ -85,9 +99,10 @@ struct GaussianVector : public RandomVect<arma::vec> {
 	 			sigmainv = arma::inv(sigma) ; 
 	 			sigmadetsqrt = sqrt(arma::det(sigma));
 	 			flag_cr = false ; // flag == false if sigma != Id
-	 			SGIS_rho = 1. ;
-				SGIS_a = 1. ;
-				SGIS_b = 2. ;
+	 			_SGIS_rho = 1. ;
+				_SGIS_a = 1. ;
+				_SGIS_b = 2. ;
+				_SGIS_C = 2. ;
 	 		}
 
 	arma::vec operator()(){

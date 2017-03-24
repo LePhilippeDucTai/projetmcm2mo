@@ -16,14 +16,18 @@ double gamma(int p,double g0){
 double identite(double x){ return x ;}
 
 // fonction phi, identité en dimension 1
-double identite(arma::vec x){
+double identite(arma::vec &x){
 	return x(0);
 }
 
+double sum_square(arma::vec &x){
+	double res = arma::norm(x, 2);
+	return res*res ;
+}
 
 int main(){
 
-	double alpha = 0.975 ;
+	double alpha = 0.975;
 	double gamma0 =  2. ;
 	int dimension = 1 ;
 	double error = 1e-6;
@@ -32,6 +36,13 @@ int main(){
 	StochasticGradient S(G,gamma0,gamma,identite,alpha) ;
 	S.Iterate(error);
 	S.display();
+
+	GaussianVector H(dimension);
+	StochasticGradient T(H,gamma0,gamma,identite,alpha) ;
+	T.IterateIS(error);
+	T.display();
+
+
 
 	return 0 ;
 	//seed = std::chrono::system_clock::now().time_since_epoch().count();
