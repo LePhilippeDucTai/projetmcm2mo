@@ -115,7 +115,7 @@ arma::vec StochasticGradient::K1(arma::vec &x){
  double pm2t = X.Pdf(x-2.*_theta); //p(x-2theta)
  arma::vec gradpm2t = X.Gradient(x-2.*_theta); //Grad.p(x-2theta)
  double cste = exp(-2.*X.SGIS_rho()*pow(arma::norm(_theta),X.SGIS_b()));
- arma::vec xmt = x- _theta ;
+ arma::vec xmt = x-_theta ;
  arma::vec W1t = (_phi(xmt)>= _xi)*(cste*pmt*pmt/(p*pm2t*pm2t))*gradpm2t;  // W1 tilde
  return W1t ;
 }
@@ -128,7 +128,7 @@ arma::vec StochasticGradient::K2(arma::vec &x){
  arma::vec gradpm2m = X.Gradient(x-2.*_mu); //Grad.p(x-2mu)
  double cste = exp(-2.*X.SGIS_rho()*pow(arma::norm(_theta),X.SGIS_b())-X.SGIS_a()*(pow(arma::norm(_mu),2)+1.));
  arma::vec xmm = x-_mu ; 
- arma::vec W2t = fmax(0.,_phi(xmm)- _xi)*(cste*pmm*pmm/(p*pm2m*pm2m))*gradpm2m;  // W2tilde
+ arma::vec W2t = pow(fmax(0.,_phi(xmm)- _xi),2)*(cste*pmm*pmm/(p*pm2m*pm2m))*gradpm2m;  // W2tilde
  return W2t ;
 }
 
