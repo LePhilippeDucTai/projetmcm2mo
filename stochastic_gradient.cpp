@@ -105,7 +105,7 @@ return cste*(1. - (1./(1.-_alpha))*(_phi(xpt)>= _xi)*X.Pdf(xpt)/X.Pdf(x));
 
 double StochasticGradient::L2(arma::vec &x){
  arma::vec xpm = x+_mu ;
- return X.SGIS_C() - (_xi + (1./(1.-_alpha))*fmax(0.,_phi(xpm)-_xi)*X.Pdf(xpm)/X.Pdf(x));
+ return _c - (_xi + (1./(1.-_alpha))*fmax(0.,_phi(xpm)-_xi)*X.Pdf(xpm)/X.Pdf(x));
 }
 
 // K1 is needed for theta, hence is a vector

@@ -28,21 +28,19 @@ double sum_square(arma::vec &x){
 int main(){
 
 	double alpha = 0.975;
-	double gamma0 =  2. ;
-	int dimension = 1 ;
+	double gamma0 =  1. ;
+	int dimension = 2 ;
 	double error = 1e-6;
 
 	GaussianVector G(dimension);
-	StochasticGradient S(G,gamma0,gamma,identite,alpha) ;
+	StochasticGradient S(G,gamma0,gamma,sum_square,alpha) ;
 	S.Iterate(error);
 	S.display();
 
 	GaussianVector H(dimension);
-	StochasticGradient T(H,gamma0,gamma,identite,alpha) ;
+	StochasticGradient T(H,gamma0,gamma,sum_square,alpha) ;
 	T.IterateIS(error);
 	T.display();
-
-
 
 	return 0 ;
 	//seed = std::chrono::system_clock::now().time_since_epoch().count();

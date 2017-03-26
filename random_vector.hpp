@@ -83,14 +83,15 @@ struct UniformVector : public RandomVect<arma::vec> {
 
 struct GaussianVector : public RandomVect<arma::vec> {
 	// Gaussian vector initialized as N(0, Id)
-	 GaussianVector(int N) // flag == true if sigma == Id 
+	GaussianVector(int N) // flag == true if sigma == Id 
  			: mu(arma::zeros<arma::vec>(N)), sigma(arma::eye<arma::mat>(N,N)), flag_cr(true) 
 				{ d = N; 
-				_SGIS_rho = 1. ;
-				_SGIS_a = 1. ;
+				_SGIS_rho = .5 ;
+				_SGIS_a = 10. ;
 				_SGIS_b = 2. ;
 				_SGIS_C = 2. ;
 				sigmainv = sigma ;
+				sigmadetsqrt=1.;
 				}
  	GaussianVector(arma::vec mu , arma::mat sigma, int N)
 			: mu(mu), sigma(sigma) {
@@ -99,8 +100,8 @@ struct GaussianVector : public RandomVect<arma::vec> {
 	 			sigmainv = arma::inv(sigma) ; 
 	 			sigmadetsqrt = sqrt(arma::det(sigma));
 	 			flag_cr = false ; // flag == false if sigma != Id
-	 			_SGIS_rho = 1. ;
-				_SGIS_a = 1. ;
+	 			_SGIS_rho = .5 ;
+				_SGIS_a = 10. ;
 				_SGIS_b = 2. ;
 				_SGIS_C = 2. ;
 	 		}
@@ -121,7 +122,7 @@ struct GaussianVector : public RandomVect<arma::vec> {
 
 	// Gradient de la Pdf
 	inline arma::vec Gradient(arma::vec x){
-		return Pdf(x)*sigmainv*(x-mu) ;
+		return (-1)*Pdf(x)*sigmainv*(x-mu) ;
 	}
 
 	inline double norm_inv(double x){
