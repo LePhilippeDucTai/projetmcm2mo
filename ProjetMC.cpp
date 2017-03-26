@@ -25,20 +25,43 @@ double sum_square(arma::vec &x){
 	return res*res ;
 }
 
+double portefeuille(arma::vec &x) {
+	double T = 0.25 ;
+	double r = 0.05 ;
+	double vol = 0.2 ;
+	double K1 = 130 ;
+	double K2 = 110 ;
+	double S_0 = 120 ;
+	double P = 0. ;
+	double C = S_0*exp( (r-vol*vol*0.5)*T ) ;
+	double k1 = K1/C ;
+	double k2 = K2/C ;
+	double S ;
+	for(auto G : x){
+		S = exp(vol*sqrt(T)*G) ;
+		P = P + (fmax( S - k1,0.) + fmax(k2 - S,0.));
+	}
+	return 10.*C*P ;
+}
+
 int main(){
 
-	double alpha = 0.975;
-	double gamma0 =  1. ;
-	int dimension = 2 ;
+	double alpha = 0.995;
+	double gamma0 =  .5 ;
+	int dimension = 5 ;
 	double error = 1e-6;
 
+	std::cout << std::endl ;
+	std::cout << "Stochastic Gradient without Importance sampling : " << std::endl ;
 	GaussianVector G(dimension);
-	StochasticGradient S(G,gamma0,gamma,sum_square,alpha) ;
+	StochasticGradient S(G,gamma0,gamma,portefeuille,alpha) ;
 	S.Iterate(error);
 	S.display();
 
+	std::cout << std::endl ;
+	std::cout << "Stochastic Gradient with Importance sampling : " << std::endl ;
 	GaussianVector H(dimension);
-	StochasticGradient T(H,gamma0,gamma,sum_square,alpha) ;
+	StochasticGradient T(H,gamma0,gamma,portefeuille,alpha) ;
 	T.IterateIS(error);
 	T.display();
 
