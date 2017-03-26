@@ -47,7 +47,7 @@ double portefeuille(arma::vec &x) {
 int main(){
 
 	double alpha = 0.995;
-	double gamma0 =  .5 ;
+	double gamma0 =  1. ;
 	int dimension = 5 ;
 	double error = 1e-6;
 
