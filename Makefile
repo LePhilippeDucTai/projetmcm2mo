@@ -1,5 +1,5 @@
 CXX=g++ -larmadillo
-CXXFLAGS=-g -std=c++11
+CXXFLAGS=-g -std=c++11 -fopenmp
 BIN=mc
 
 SRC=$(wildcard *.cpp) 

@@ -8,7 +8,7 @@
 StochasticGradient::StochasticGradient( GaussianVector Y, 
 																				double gamma0, 
 																				double (*gamma)(int,double), 
-																				double (*phi)(arma::vec &x),
+																				double (*phi)(const arma::vec &),
 																				double alpha)
 				: X(Y), _gamma0(gamma0), 
 					_gamma(gamma), _phi(phi), 
@@ -39,21 +39,19 @@ void StochasticGradient::Iterate(double epsilon){
 		_lastxi = _xi ; // Enregistrement de la dernière valeur de xi
 		_lastc = _c ; // Enregistrement de la dernière valeur de c
 		simX = X();
+		niterate++;
 		h1 = StochasticGradient::H1(simX);
 		h2 = StochasticGradient::H2(simX); 
-		_xi = _xi - _gamma(n,_gamma0)*h1 ;
-		_c = _c - _gamma(n,_gamma0)*h2 ;
-		niterate++;
-		n++ ;
-		std::cout << n << std::endl;
-		std::cout << niterate << std::endl;
+		_xi = _xi - _gamma(niterate,_gamma0)*h1 ;
+		_c = _c - _gamma(niterate,_gamma0)*h2 ;
+
+
 	}while( precision_xi() + precision_c() > epsilon );
 }
 
 
 void StochasticGradient::IterateIS(double epsilon) {
 	// Faire une boucle tant que la précision de xi + c est supérieure à epsilon
-	int n = 1 ;
 	double l1,l2 ;
 	arma::vec k1,k2;
 	arma::vec simX ;
@@ -61,17 +59,36 @@ void StochasticGradient::IterateIS(double epsilon) {
 		_lastxi = _xi ; // Enregistrement de la dernière valeur de xi
 		_lastc = _c ; // Enregistrement de la dernière valeur de c
 		simX = X();
-		l1 = StochasticGradient::L1(simX);
-		l2 = StochasticGradient::L2(simX);
-		k1 = StochasticGradient::K1(simX);
-		k2 = StochasticGradient::K2(simX);
-		_xi = _xi - _gamma(n,_gamma0)*l1 ;
-		_c = _c - _gamma(n,_gamma0)*l2 ;
-		_theta = _theta - _gamma(n,_gamma0)*k1 ;
-		_mu = _mu - _gamma(n,_gamma0)*k2 ;
 		niterate++;
-		n++ ;
+		l1 = L1(simX);
+		l2 = L2(simX);
+		k1 = K1(simX);
+		k2 = K2(simX);
+		_xi = _xi - _gamma(niterate,_gamma0)*l1 ;
+		_c = _c - _gamma(niterate,_gamma0)*l2 ;
+		_theta = _theta - _gamma(niterate,_gamma0)*k1 ;
+		_mu = _mu - _gamma(niterate,_gamma0)*k2 ;
+
 	}while( precision_xi() + precision_c() > epsilon );
+
+//	_xi = 0;
+//	_lastxi = 999;
+//	_c = 0;
+//	_lastc = 9999;
+//	for(;precision_xi() + precision_c() > epsilon; ++niterate) {
+//		_lastxi = _xi ; // Enregistrement de la dernière valeur de xi
+//		_lastc = _c ; // Enregistrement de la dernière valeur de c
+//		simX = X();
+//		l1 = L1(simX);
+//		l2 = L2(simX);
+//		k1 = K1(simX);
+//		k2 = K2(simX);
+//		_xi = _xi - _gamma(niterate,_gamma0)*l1 ;
+//		_c = _c - _gamma(niterate,_gamma0)*l2 ;
+//		_theta = _theta - _gamma(niterate,_gamma0)*k1 ;
+//		_mu = _mu - _gamma(niterate,_gamma0)*k2 ;
+//	}
+
 }
 
 
@@ -121,7 +138,7 @@ double StochasticGradient::L2(const arma::vec &x){
 }
 
 // K1 is needed for theta, hence is a vector
-arma::vec StochasticGradient::K1(const arma::vec &x){
+arma::vec StochasticGradient::K1(arma::vec &x){
  double p = X.Pdf(x); // p(x)
  double pmt = X.Pdf(x-_theta); // p(x-theta)
  double pm2t = X.Pdf(x-2.*_theta); //p(x-2theta)
@@ -133,7 +150,7 @@ arma::vec StochasticGradient::K1(const arma::vec &x){
 }
 
 // K2 is needed for mu, hence is a vector
-arma::vec StochasticGradient::K2(const arma::vec &x){
+arma::vec StochasticGradient::K2(arma::vec &x){
  double p = X.Pdf(x); // p(x)
  double pmm = X.Pdf(x-_mu); // p(x-mu)
  double pm2m = X.Pdf(x-2.*_mu); //p(x-2mu)
