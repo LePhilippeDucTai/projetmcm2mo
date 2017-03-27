@@ -133,7 +133,7 @@ arma::vec StochasticGradient::K1(const arma::vec &x){
 }
 
 // K2 is needed for mu, hence is a vector
-arma::vec StochasticGradient::K2(arma::vec &x){
+arma::vec StochasticGradient::K2(const arma::vec &x){
  double p = X.Pdf(x); // p(x)
  double pmm = X.Pdf(x-_mu); // p(x-mu)
  double pm2m = X.Pdf(x-2.*_mu); //p(x-2mu)
