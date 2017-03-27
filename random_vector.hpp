@@ -69,7 +69,7 @@ struct UniformVector : public RandomVect<arma::vec> {
 		return value ;
 	}
 
-	inline double Pdf(const arma::vec x) const {
+	inline double Pdf(const arma::vec &x) const {
 		for(int i = 0 ; i < d ; i++ ) {
 			if (x(i) < left_boundary && x(i) > right_boundary)
 				return 0. ;
