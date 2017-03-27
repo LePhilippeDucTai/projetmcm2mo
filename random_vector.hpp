@@ -114,14 +114,14 @@ struct GaussianVector : public RandomVect<arma::vec> {
 		else return value = mu + sigmachol*value ;
 	}
 
-	inline double Pdf(const arma::vec x) { 
+	inline double Pdf(const arma::vec &x) { 
 		double C = 1./(pow(2.*M_PI,d/2.)*sigmadetsqrt);
 		double Y = arma::as_scalar(-0.5*(x-mu).t()*sigmainv*(x-mu)) ;
 		return C*exp(Y) ;
 	}
 
 	// Gradient de la Pdf
-	inline arma::vec Gradient(const arma::vec x){
+	inline arma::vec Gradient(const arma::vec &x){
 		return (-1)*Pdf(x)*sigmainv*(x-mu) ;
 	}
 
