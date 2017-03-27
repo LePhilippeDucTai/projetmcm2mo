@@ -51,12 +51,12 @@ int main(){
 	int dimension = 5 ;
 	double error = 1e-6;
 
-	std::cout << std::endl ;
-	std::cout << "Stochastic Gradient without Importance sampling : " << std::endl ;
-	GaussianVector G(dimension);
-	StochasticGradient S(G,gamma0,gamma,portefeuille,alpha) ;
-	S.Iterate(error);
-	S.display();
+//	std::cout << std::endl ;
+//	std::cout << "Stochastic Gradient without Importance sampling : " << std::endl ;
+//	GaussianVector G(dimension);
+//	StochasticGradient S(G,gamma0,gamma,portefeuille,alpha) ;
+//	S.Iterate(error);
+//	S.display();
 
 	std::cout << std::endl ;
 	std::cout << "Stochastic Gradient with Importance sampling : " << std::endl ;

@@ -34,16 +34,16 @@ template <class T> struct RandomVect {
 		generator.seed(seed);
 	}
 
-	double SGIS_rho(){
+	double SGIS_rho() const {
 		return _SGIS_rho ;
 	}
-	double SGIS_a(){
+	double SGIS_a() const { 
 		return _SGIS_a ;
 	}
-	double SGIS_b(){
+	double SGIS_b() const {
 		return _SGIS_b;
 	}
-	double SGIS_C(){
+	double SGIS_C() const {
 		return _SGIS_C;
 	}
  protected:
@@ -64,16 +64,16 @@ struct UniformVector : public RandomVect<arma::vec> {
 	arma::vec operator()() {
 		arma::vec A(d);
 		value = A ;
-		value.imbue( [&]() { return left_boundary + (right_boundary - left_boundary) * 
+		value.imbue([&]() { return left_boundary + (right_boundary - left_boundary) * 
 								generator()/(static_cast<double>(generator.max()));  } );
 		return value ;
 	}
 
-	inline double Pdf(arma::vec x) {
+	inline double Pdf(const arma::vec x) const {
 		for(int i = 0 ; i < d ; i++ ) {
 			if (x(i) < left_boundary && x(i) > right_boundary)
 				return 0. ;
-		}
+			}
 		return 1./pow(static_cast<double>(right_boundary - left_boundary),d) ;
 	}
  private:
@@ -83,17 +83,17 @@ struct UniformVector : public RandomVect<arma::vec> {
 
 struct GaussianVector : public RandomVect<arma::vec> {
 	// Gaussian vector initialized as N(0, Id)
-	GaussianVector(int N) // flag == true if sigma == Id 
- 			: mu(arma::zeros<arma::vec>(N)), sigma(arma::eye<arma::mat>(N,N)), flag_cr(true) 
-				{ d = N; 
+	GaussianVector(const int N) // flag == true if sigma == Id 
+ 			: mu(arma::zeros<arma::vec>(N)), sigma(arma::eye<arma::mat>(N,N)), flag_cr(true) { 
+				d = N; 
 				_SGIS_rho = .5 ;
 				_SGIS_a = 10. ;
 				_SGIS_b = 2. ;
 				_SGIS_C = 2. ;
 				sigmainv = sigma ;
-				sigmadetsqrt=1.;
+				sigmadetsqrt= 1.;
 				}
- 	GaussianVector(arma::vec mu , arma::mat sigma, int N)
+ 	GaussianVector(const arma::vec mu , const arma::mat sigma, int N)
 			: mu(mu), sigma(sigma) {
 				d = N;
 	 			sigmachol = arma::chol(sigma,"lower");
@@ -114,14 +114,14 @@ struct GaussianVector : public RandomVect<arma::vec> {
 		else return value = mu + sigmachol*value ;
 	}
 
-	inline double Pdf(arma::vec x) { 
+	inline double Pdf(const arma::vec x) { 
 		double C = 1./(pow(2.*M_PI,d/2.)*sigmadetsqrt);
 		double Y = arma::as_scalar(-0.5*(x-mu).t()*sigmainv*(x-mu)) ;
 		return C*exp(Y) ;
 	}
 
 	// Gradient de la Pdf
-	inline arma::vec Gradient(arma::vec x){
+	inline arma::vec Gradient(const arma::vec x){
 		return (-1)*Pdf(x)*sigmainv*(x-mu) ;
 	}
 
