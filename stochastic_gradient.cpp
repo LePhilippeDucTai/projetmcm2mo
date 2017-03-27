@@ -5,12 +5,22 @@
 // 		: _gamma0(gamma0), _gamma(gamma), _xi(xi0), _alpha(alpha), _c(0.), niterate(0.) {}
 
 // Sequences are initialized at 0 by default
-StochasticGradient::StochasticGradient(GaussianVector Y, double gamma0, double (*gamma)(int,double), double (*phi)(arma::vec &x), double alpha)
-	: X(Y), _gamma0(gamma0), _gamma(gamma), _phi(phi),_alpha(alpha), _dim(Y.Size()),_c(0.),_xi(0.), 
-		_theta(arma::zeros<arma::vec>(Y.Size())), _mu(arma::zeros<arma::vec>(Y.Size())), niterate(0){}
+StochasticGradient::StochasticGradient( GaussianVector Y, 
+																				double gamma0, 
+																				double (*gamma)(int,double), 
+																				double (*phi)(arma::vec &x),
+																				double alpha)
+				: X(Y), _gamma0(gamma0), 
+					_gamma(gamma), _phi(phi), 
+					_alpha(alpha), _dim(Y.Size()),
+					_c(0.),_xi(0.), _theta(arma::zeros<arma::vec>(Y.Size())), 
+					_mu(arma::zeros<arma::vec>(Y.Size())), 
+					niterate(0) {}
 
 	// In case we need to initialize the sequences
-	void StochasticGradient::init_seq(double xi0, double c0, arma::vec theta, arma::vec mu, double rho,double a,double b){
+	void StochasticGradient::init_seq(double xi0, double c0, 
+																		arma::vec theta, arma::vec mu, 
+																		double rho,double a,double b) {
 		_xi = xi0 ;
 		_c = c0 ;
 		_theta = theta ;
@@ -35,6 +45,8 @@ void StochasticGradient::Iterate(double epsilon){
 		_c = _c - _gamma(n,_gamma0)*h2 ;
 		niterate++;
 		n++ ;
+		std::cout << n << std::endl;
+		std::cout << niterate << std::endl;
 	}while( precision_xi() + precision_c() > epsilon );
 }
 
@@ -65,11 +77,11 @@ void StochasticGradient::IterateIS(double epsilon) {
 
 
 //Calcul de la différence |xi_(n+1)-xi_(n)| ;
-double StochasticGradient::precision_xi(){
+inline double StochasticGradient::precision_xi() const{
 	return abs(_xi - _lastxi) ;
 }
 
-double StochasticGradient::precision_c(){
+inline double StochasticGradient::precision_c() const {
 	return abs(_c - _lastc) ;
 }
 
@@ -88,28 +100,28 @@ std::cout << "VaR-" << _alpha  << " : " << _xi << std::endl ;
 std::cout << "CVaR-" << _alpha << " : " << _c << std::endl;
 }
 
-double StochasticGradient::H1(arma::vec &x){
+double StochasticGradient::H1(const arma::vec &x){
 	return (1.-(1./(1.-_alpha))*(_phi(x) > _xi));
 }
 
-double StochasticGradient::H2(arma::vec &x){
+double StochasticGradient::H2(const arma::vec &x){
 	return _c - _xi - (1./(1.-_alpha))*fmax(0., _phi(x) - _xi) ;
 }
 
-double StochasticGradient::L1(arma::vec &x){
+double StochasticGradient::L1(const arma::vec &x){
 double cste = exp(-1.*X.SGIS_rho()*pow(arma::norm(_theta),X.SGIS_b()));
 arma::vec xpt = x+_theta ;
 return cste*(1. - (1./(1.-_alpha))*(_phi(xpt)>= _xi)*X.Pdf(xpt)/X.Pdf(x));
 }
 
 
-double StochasticGradient::L2(arma::vec &x){
+double StochasticGradient::L2(const arma::vec &x){
  arma::vec xpm = x+_mu ;
  return _c - (_xi + (1./(1.-_alpha))*fmax(0.,_phi(xpm)-_xi)*X.Pdf(xpm)/X.Pdf(x));
 }
 
 // K1 is needed for theta, hence is a vector
-arma::vec StochasticGradient::K1(arma::vec &x){
+arma::vec StochasticGradient::K1(const arma::vec &x){
  double p = X.Pdf(x); // p(x)
  double pmt = X.Pdf(x-_theta); // p(x-theta)
  double pm2t = X.Pdf(x-2.*_theta); //p(x-2theta)
