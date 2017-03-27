@@ -6,6 +6,7 @@
 #include <iostream>
 #include <cmath>
 #include <armadillo>
+// #include "RNGSobol.h"
 
 using namespace arma ;
 
@@ -26,17 +27,17 @@ double sum_square(arma::vec &x){
 }
 
 double portefeuille(arma::vec &x) {
-	double T = 0.25 ;
-	double r = 0.05 ;
-	double vol = 0.2 ;
-	double K1 = 130 ;
-	double K2 = 110 ;
-	double S_0 = 120 ;
-	double P = 0. ;
-	double C = S_0*exp( (r-vol*vol*0.5)*T ) ;
-	double k1 = K1/C ;
-	double k2 = K2/C ;
+	const double T = 0.25 ;
+	const double r = 0.05 ;
+	const double vol = 0.2 ;
+	const double K1 = 130 ;
+	const double K2 = 110 ;
+	const double S_0 = 120 ;
+	const double C = S_0*exp( (r-vol*vol*0.5)*T ) ;
+	const double k1 = K1/C ;
+	const double k2 = K2/C ;
 	double S ;
+	double P = 0. ;
 	for(auto G : x){
 		S = exp(vol*sqrt(T)*G) ;
 		P = P + (fmax( S - k1,0.) + fmax(k2 - S,0.));
@@ -49,8 +50,10 @@ int main(){
 	double alpha = 0.995;
 	double gamma0 =  1. ;
 	int dimension = 5 ;
-	double error = 1e-6;
-
+	double error = 1e-7;
+	// RNGSobol X ;
+	// X.setSeed(1);
+	// std::cout << X.generate01() << std::endl;
 	std::cout << std::endl ;
 	std::cout << "Stochastic Gradient without Importance sampling : " << std::endl ;
 	GaussianVector G(dimension);
