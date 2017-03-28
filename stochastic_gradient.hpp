@@ -14,7 +14,7 @@ public:
 	// L'algorithme du gradient stochastique est déterminé par la suite gamma et son terme initial.
 	//Constructeur
 	// StochasticGradient(double gamma0, double (*gamma)(int,double), double xi0,double alpha);
-	StochasticGradient(GaussianVector X, double gamma0, double (*gamma)(int,double), double (*phi)(arma::vec &x),double alpha);
+	StochasticGradient(GaussianVector X, double gamma0, double (*gamma)(int,double), double (*phi)(const arma::vec &),double alpha);
 	
 	// Initialize the sequences before doing iterations
 	void init_seq(double xi0, double c0, arma::vec theta, arma::vec mu,double rho, double a, double b);
@@ -23,12 +23,12 @@ public:
 	//double gamma(int n);
 	void Iterate(double epsilon); // L'algorithme s'arrête quand la convergence est suffisamment fine
 	void IterateIS(double epsilon);
-	double precision_xi();
-	double precision_c();
-	double H1(arma::vec &x);
-	double H2(arma::vec &x);
-	double L1(arma::vec &x);
-	double L2(arma::vec &x);
+	inline double precision_xi() const;
+	inline double precision_c() const ;
+	double H1(const arma::vec &x);
+	double H2(const arma::vec &x);
+	double L1(const arma::vec &x);
+	double L2(const arma::vec &x);
 	arma::vec K1(arma::vec &x);
 	arma::vec K2(arma::vec &x);
 
@@ -41,7 +41,7 @@ private:
 	double _c, _lastc  ; // représente la CVaR
 	double (*_gamma)(int,double) ; //Fonction gamma
 	double _gamma0 ; // Terme initial de la suite gamma
-	double (*_phi)(arma::vec &x); // Fonction "payoff" de R^d -> R
+	double (*_phi)(const arma::vec &x); // Fonction "payoff" de R^d -> R
 	double _alpha ;
 	int niterate ;
 	arma::vec _theta ;
@@ -54,4 +54,5 @@ private:
 	GaussianVector X ; // Find a way to generalize to RandomVectors
 
 };
+
 #endif

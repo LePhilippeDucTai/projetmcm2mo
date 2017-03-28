@@ -17,25 +17,26 @@ double gamma(int p,double g0){
 double identite(double x){ return x ;}
 
 // fonction phi, identité en dimension 1
-double identite(arma::vec &x){
+double identite(const arma::vec &x){
 	return x(0);
 }
 
-double sum_square(arma::vec &x){
+double sum_square(const arma::vec &x){
 	double res = arma::norm(x, 2);
 	return res*res ;
 }
 
-double portefeuille(arma::vec &x) {
-	const double T = 0.25 ;
-	const double r = 0.05 ;
-	const double vol = 0.2 ;
-	const double K1 = 130 ;
-	const double K2 = 110 ;
-	const double S_0 = 120 ;
-	const double C = S_0*exp( (r-vol*vol*0.5)*T ) ;
-	const double k1 = K1/C ;
-	const double k2 = K2/C ;
+double portefeuille(const arma::vec &x) {
+	double T = 0.25 ;
+	double r = 0.05 ;
+	double vol = 0.2 ;
+	double K1 = 130 ;
+	double K2 = 110 ;
+	double S_0 = 120 ;
+	double P = 0. ;
+	double C = S_0*exp( (r-vol*vol*0.5)*T ) ;
+	double k1 = K1/C ;
+	double k2 = K2/C ;
 	double S ;
 	double P = 0. ;
 	for(auto G : x){
