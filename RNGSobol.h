@@ -2,6 +2,7 @@
 #define _RNG_SOBOL_HPP_
 
 #include "MyMisc.h"
+#include <cstdint>
 
 class RNGSobol
 {
@@ -93,15 +94,15 @@ private:
 	static const unsigned RENORMALIZATION_POTENTIAL = 2048;
 	struct
 	{
-		unsigned __int64 uValue;
+		unsigned long long uValue;
 		unsigned uPrevSeed;
 	} m_prev[QRNG_NDMS];
 	double m_fRenormalizedValue;
 	unsigned m_uCurSeed, m_uCurDim, m_uRenormalizationProduct;
 
 	// static values used for quasi-random numbers generation
-	static unsigned __int64 cjn[63][QRNG_NDMS];
-	const static unsigned __int64 MAX_INT64 = 0x8000000000000000ULL;
+	static unsigned long long cjn[63][QRNG_NDMS];
+	const static unsigned long long MAX_INT64 = 0x8000000000000000ULL;
 	static void GenerateCJ();
 	static int GeneratePolynomials(int buffer[QRNG_NDMS], bool primitive);
 };
