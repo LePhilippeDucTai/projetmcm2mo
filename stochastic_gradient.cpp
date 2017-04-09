@@ -15,7 +15,12 @@ StochasticGradient::StochasticGradient( GaussianVector Y,
 					_alpha(alpha), _dim(Y.Size()),
 					_c(0.),_xi(0.), _theta(arma::zeros<arma::vec>(Y.Size())), 
 					_mu(arma::zeros<arma::vec>(Y.Size())), 
-					niterate(0) {}
+					niterate(0) ,
+					_cesaro_xi(0.),
+					_cesaro_c(0.),
+					_varemp_xi(0.),
+					_varemp_c(0.)
+					{}
 
 	// In case we need to initialize the sequences
 	void StochasticGradient::init_seq(double xi0, double c0, 
@@ -27,6 +32,51 @@ StochasticGradient::StochasticGradient( GaussianVector Y,
 		_mu = mu ;
 	}
 
+
+
+void StochasticGradient::Calculation(double &h1, double &h2, arma::vec &simX){
+	_lastxi = _xi ; // Enregistrement de la dernière valeur de xi
+	_lastc = _c ; // Enregistrement de la dernière valeur de c
+	simX = X();
+	niterate++;
+	h1 = StochasticGradient::H1(simX);
+	h2 = StochasticGradient::H2(simX); 
+	_xi = _xi - _gamma(niterate,_gamma0)*h1 ;
+	_c = _c - _gamma(niterate,_gamma0)*h2 ;
+	_cesaro_xi = _cesaro_xi + _xi ;
+	_cesaro_c = _cesaro_c + _c ;
+	_varemp_xi = _varemp_xi + (_xi - _cesaro_xi)*(_xi - _cesaro_xi) ;
+	_varemp_c = _varemp_c + (_c - _cesaro_c)*(_c - _cesaro_c);
+}
+
+void StochasticGradient::CalculationIS(double &l1, double &l2, arma::vec &k1, arma::vec &k2, arma::vec &simX){
+	_lastxi = _xi ; // Enregistrement de la dernière valeur de xi
+	_lastc = _c ; // Enregistrement de la dernière valeur de c
+	simX = X();
+	niterate++;
+	l1 = L1(simX);
+	l2 = L2(simX);
+	k1 = K1(simX);
+	k2 = K2(simX);
+	_xi = _xi - _gamma(niterate,_gamma0)*l1 ;
+	_c = _c - _gamma(niterate,_gamma0)*l2 ;
+	_cesaro_xi = _cesaro_xi + _xi ;
+	_cesaro_c = _cesaro_c + _c ;
+	_theta = _theta - _gamma(niterate,_gamma0)*k1 ;
+	_mu = _mu - _gamma(niterate,_gamma0)*k2 ;
+	_varemp_xi = _varemp_xi + (_xi - _cesaro_xi)*(_xi - _cesaro_xi) ;
+	_varemp_c = _varemp_c + (_c - _cesaro_c)*(_c - _cesaro_c);
+}
+
+void StochasticGradient::EmpiricalMeans()
+{
+	_cesaro_xi = _cesaro_xi/niterate ;
+	_cesaro_c = _cesaro_c/niterate ;
+	_varemp_xi = _varemp_xi/niterate ;
+	_varemp_c = _varemp_c/niterate ;
+}
+
+
 // Cette fonction sera appelée dans une boucle pour i
 // Elle calculera le taux de variation de la dernière valeur de xi avec la nouvelle calculée
 // On s'arrêtera dans la boucle lorsque le taux d'erreur sera inférieur à une certaine valeur
@@ -36,19 +86,21 @@ void StochasticGradient::Iterate(double epsilon){
 	double h1,h2 ;
 	arma::vec simX ;
 	do {
-		_lastxi = _xi ; // Enregistrement de la dernière valeur de xi
-		_lastc = _c ; // Enregistrement de la dernière valeur de c
-		simX = X();
-		niterate++;
-		h1 = StochasticGradient::H1(simX);
-		h2 = StochasticGradient::H2(simX); 
-		_xi = _xi - _gamma(niterate,_gamma0)*h1 ;
-		_c = _c - _gamma(niterate,_gamma0)*h2 ;
-
-
+		Calculation(h1,h2,simX);
 	}while( precision_xi() + precision_c() > epsilon );
+	EmpiricalMeans() ;
 }
 
+void StochasticGradient::Iterate(int nsim){
+	// Faire une boucle tant que la précision de xi + c est supérieure à epsilon
+	int n = 1 ;
+	double h1,h2 ;
+	arma::vec simX ;
+	do {
+		Calculation(h1,h2,simX);
+	}while( niterate < nsim );
+	EmpiricalMeans() ;
+}
 
 void StochasticGradient::IterateIS(double epsilon) {
 	// Faire une boucle tant que la précision de xi + c est supérieure à epsilon
@@ -56,41 +108,20 @@ void StochasticGradient::IterateIS(double epsilon) {
 	arma::vec k1,k2;
 	arma::vec simX ;
 	do {
-		_lastxi = _xi ; // Enregistrement de la dernière valeur de xi
-		_lastc = _c ; // Enregistrement de la dernière valeur de c
-		simX = X();
-		niterate++;
-		l1 = L1(simX);
-		l2 = L2(simX);
-		k1 = K1(simX);
-		k2 = K2(simX);
-		_xi = _xi - _gamma(niterate,_gamma0)*l1 ;
-		_c = _c - _gamma(niterate,_gamma0)*l2 ;
-		_theta = _theta - _gamma(niterate,_gamma0)*k1 ;
-		_mu = _mu - _gamma(niterate,_gamma0)*k2 ;
-
+		CalculationIS(l1,l2,k1,k2,simX);
 	}while( precision_xi() + precision_c() > epsilon );
-
-//	_xi = 0;
-//	_lastxi = 999;
-//	_c = 0;
-//	_lastc = 9999;
-//	for(;precision_xi() + precision_c() > epsilon; ++niterate) {
-//		_lastxi = _xi ; // Enregistrement de la dernière valeur de xi
-//		_lastc = _c ; // Enregistrement de la dernière valeur de c
-//		simX = X();
-//		l1 = L1(simX);
-//		l2 = L2(simX);
-//		k1 = K1(simX);
-//		k2 = K2(simX);
-//		_xi = _xi - _gamma(niterate,_gamma0)*l1 ;
-//		_c = _c - _gamma(niterate,_gamma0)*l2 ;
-//		_theta = _theta - _gamma(niterate,_gamma0)*k1 ;
-//		_mu = _mu - _gamma(niterate,_gamma0)*k2 ;
-//	}
-
+	EmpiricalMeans() ;
 }
-
+void StochasticGradient::IterateIS(int nsim) {
+	// Faire une boucle tant que la précision de xi + c est supérieure à epsilon
+	double l1,l2 ;
+	arma::vec k1,k2;
+	arma::vec simX ;
+	do {
+		CalculationIS(l1,l2,k1,k2,simX);
+	}while( niterate < nsim );
+	EmpiricalMeans() ;
+}
 
 
 //Calcul de la différence |xi_(n+1)-xi_(n)| ;
@@ -115,6 +146,11 @@ void StochasticGradient::display(){
 std::cout << "Iterations : " << niterate << endl;
 std::cout << "VaR-" << _alpha  << " : " << _xi << std::endl ;
 std::cout << "CVaR-" << _alpha << " : " << _c << std::endl;
+std::cout << "Cesaro VaR-" << _alpha << " : " << _cesaro_xi << std::endl ;
+std::cout << "Cesaro CVaR-" << _alpha << " : " << _cesaro_c << std::endl ;
+std::cout << "Variance Empirique VaR-" << _alpha << " : " << _varemp_xi << std::endl ;
+std::cout << "Variance Empirique CVaR-" << _alpha << " : " << _varemp_c << std::endl;
+
 }
 
 double StochasticGradient::H1(const arma::vec &x){

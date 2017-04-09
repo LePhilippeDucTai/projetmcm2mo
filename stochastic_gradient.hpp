@@ -23,6 +23,11 @@ public:
 	//double gamma(int n);
 	void Iterate(double epsilon); // L'algorithme s'arrête quand la convergence est suffisamment fine
 	void IterateIS(double epsilon);
+	void Iterate(int nsim);
+	void IterateIS(int nsim) ;
+	void Calculation(double &h1, double &h2, arma::vec &simX);
+	void CalculationIS(double &l1, double &l2, arma::vec &k1, arma::vec &k2, arma::vec &simX);
+	void EmpiricalMeans();
 	inline double precision_xi() const;
 	inline double precision_c() const ;
 	double H1(const arma::vec &x);
@@ -39,6 +44,11 @@ public:
 private:
 	double _xi, _lastxi ; // représente la VaR
 	double _c, _lastc  ; // représente la CVaR
+	double _cesaro_xi ;
+	double _cesaro_c ;
+	double _varemp_xi ;
+	double _varemp_c ;
+
 	double (*_gamma)(int,double) ; //Fonction gamma
 	double _gamma0 ; // Terme initial de la suite gamma
 	double (*_phi)(const arma::vec &x); // Fonction "payoff" de R^d -> R

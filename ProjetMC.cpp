@@ -50,67 +50,66 @@ int main(){
 	double alpha = 0.975;
 	double gamma0 =  1. ;
 	int dimension = 1 ;
-	double error = 1e-6;
+	// double error = 1e-6;
 	// RNGSobol X ;
 	// X.setDim(1);
 	// X.setSeed(1);
 	// std::cout << X.generate01() << std::endl;
-	std::cout << "##########################################" << std::endl ;
-	alpha = 0.975;
-	dimension = 1 ;
-	std::cout << std::endl ;
-	std::cout << "####### Application à des Gaussiennes Centrées réduites 97.5% ########" << std::endl ;
-	std::cout << "Stochastic Gradient without Importance sampling : " << std::endl ;
-	GaussianVector G1(dimension);
-	StochasticGradient S1(G1,gamma0,gamma,identite,alpha) ;
-	S1.Iterate(error);
-	S1.display();
+	// std::cout << "##########################################" << std::endl ;
+	// alpha = 0.975;
+	// dimension = 1 ;
+	// std::cout << std::endl ;
+	// std::cout << "####### Application à des Gaussiennes Centrées réduites 97.5% ########" << std::endl ;
+	// std::cout << "Stochastic Gradient without Importance sampling : " << std::endl ;
+	// GaussianVector G1(dimension);
+	// StochasticGradient S1(G1,gamma0,gamma,identite,alpha) ;
+	// S1.Iterate(error);
+	// S1.display();
 
-	std::cout << std::endl ;
-	std::cout << "Stochastic Gradient with Importance sampling : " << std::endl ;
-	GaussianVector H1(dimension);
-	StochasticGradient T1(H1,gamma0,gamma,identite,alpha) ;
-	T1.IterateIS(error);
-	T1.display();
+	// std::cout << std::endl ;
+	// std::cout << "Stochastic Gradient with Importance sampling : " << std::endl ;
+	// GaussianVector H1(dimension);
+	// StochasticGradient T1(H1,gamma0,gamma,identite,alpha) ;
+	// T1.IterateIS(error);
+	// T1.display();
 
-	std::cout << "##########################################" << std::endl ;
-	alpha = 0.975;
-	dimension = 5 ;
-	std::cout << std::endl ;
-	std::cout << "####### Application à des Chi-deux à 5 degres de liberte 97.5% ########" << std::endl ;
-	std::cout << "Stochastic Gradient without Importance sampling : " << std::endl ;
-	GaussianVector G2(dimension);
-	StochasticGradient S2(G2,gamma0,gamma,sum_square,alpha) ;
-	S2.Iterate(error);
-	S2.display();
+	// std::cout << "##########################################" << std::endl ;
+	// alpha = 0.975;
+	// dimension = 5 ;
+	// std::cout << std::endl ;
+	// std::cout << "####### Application à des Chi-deux à 5 degres de liberte 97.5% ########" << std::endl ;
+	// std::cout << "Stochastic Gradient without Importance sampling : " << std::endl ;
+	// GaussianVector G2(dimension);
+	// StochasticGradient S2(G2,gamma0,gamma,sum_square,alpha) ;
+	// S2.Iterate(error);
+	// S2.display();
 
-	std::cout << std::endl ;
-	std::cout << "Stochastic Gradient with Importance sampling : " << std::endl ;
-	GaussianVector H2(dimension);
-	StochasticGradient T2(H2,gamma0,gamma,sum_square,alpha) ;
-	T2.IterateIS(error);
-	T2.display();
-
-
-
+	// std::cout << std::endl ;
+	// std::cout << "Stochastic Gradient with Importance sampling : " << std::endl ;
+	// GaussianVector H2(dimension);
+	// StochasticGradient T2(H2,gamma0,gamma,sum_square,alpha) ;
+	// T2.IterateIS(error);
+	// T2.display();
 
 	std::cout << "##########################################" << std::endl ;
 
 	alpha = 0.995;
 	dimension = 5 ;
+	int nsim = 1000000 ;
+
 		std::cout << std::endl ;
 	std::cout << "####### Exemple 2 : Calls et Puts 99.5% ########" << std::endl ;
 	std::cout << "Stochastic Gradient without Importance sampling : " << std::endl ;
 	GaussianVector G(dimension);
 	StochasticGradient S(G,gamma0,gamma,portefeuille,alpha) ;
-	S.Iterate(error);
+	S.Iterate(nsim);
 	S.display();
 
 	std::cout << std::endl ;
 	std::cout << "Stochastic Gradient with Importance sampling : " << std::endl ;
 	GaussianVector H(dimension);
 	StochasticGradient T(H,gamma0,gamma,portefeuille,alpha) ;
-	T.IterateIS(error);
+	T.IterateIS(nsim);
 	T.display();
 
 
